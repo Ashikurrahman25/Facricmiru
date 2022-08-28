@@ -10,7 +10,9 @@ public enum TweanType
    RightToCenter,
    LeftToCenter, 
    CenterToRight, 
-   CenterToLeft
+   CenterToLeft,
+   BottomToCenter,
+   CenterToBottom
 }
 public class UIAnimator : MonoBehaviour
 {
@@ -25,6 +27,7 @@ public class UIAnimator : MonoBehaviour
     public UnityEvent onCompleteCommon;
     public UnityEvent onCompleteRight;
     public UnityEvent onCompleteLeft;
+    public UnityEvent onCompleteBottom;
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -58,6 +61,15 @@ public class UIAnimator : MonoBehaviour
             case TweanType.CenterToLeft:
                 CenterToLeft();
                 break;
+
+            case TweanType.BottomToCenter:
+                BottomToCenter();
+                break;
+
+            case TweanType.CenterToBottom:
+                CenterToBottom();
+                break;
+
             default:
                 break;
         }
@@ -66,7 +78,7 @@ public class UIAnimator : MonoBehaviour
 
     public void RightToCenter()
     {
-        rectTransform.localPosition = new Vector3(offSet, targetPos.y, targetPos.z);
+        rectTransform.localPosition = new Vector3(offSet, 0, 0);
         targetPos = new Vector3(0, 0, 0);
         onComplete = onCompleteCommon;
         MoveTransitionEffect();
@@ -88,9 +100,24 @@ public class UIAnimator : MonoBehaviour
 
     public void LeftToCenter()
     {
-        rectTransform.localPosition = new Vector3(offSet * -1, targetPos.y, targetPos.z);
+        rectTransform.localPosition = new Vector3(offSet * -1, 0, 0);
         targetPos = new Vector3(0, 0, 0);
         onComplete = onCompleteCommon;
+        MoveTransitionEffect();
+    }
+
+    public void BottomToCenter()
+    {
+        rectTransform.localPosition = new Vector3(targetPos.x, offSet * -1, targetPos.z);
+        targetPos = new Vector3(0, 0, 0);
+        onComplete = onCompleteCommon;
+        MoveTransitionEffect();
+    }
+
+    public void CenterToBottom()
+    {
+        onComplete = onCompleteBottom;
+        targetPos = new Vector3(0, offSet* - 1, 0);
         MoveTransitionEffect();
     }
 
